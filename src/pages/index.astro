@@ -14,10 +14,10 @@ import '@styles/print.css';
   <!-- 1. Header (sticky) -->
   <Header />
 
-  <!-- 2. Desktop toolbar row: visible md+ only -->
+  <!-- 2. Desktop toolbar row: visible md+ only, sticky -->
   <div
     id="desktop-toolbar-row"
-    class="hidden items-center gap-2 border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 py-2 md:flex"
+    class="sticky top-0 z-40 hidden items-center gap-2 border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]/80 px-4 py-2 backdrop-blur-md md:flex"
   >
     <div class="flex-1 overflow-x-auto">
       <Toolbar />
@@ -25,10 +25,10 @@ import '@styles/print.css';
     <ActionBar />
   </div>
 
-  <!-- 3. Mobile tabs: visible < md only -->
+  <!-- 3. Mobile tabs: visible < md only, sticky -->
   <div
     id="mobile-tabs"
-    class="flex border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)] md:hidden"
+    class="sticky top-0 z-40 flex border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]/80 backdrop-blur-md md:hidden"
   >
     <button
       id="tab-write"
@@ -48,10 +48,10 @@ import '@styles/print.css';
     </button>
   </div>
 
-  <!-- 4. Mobile toolbar: visible < md, only on Write tab -->
+  <!-- 4. Mobile toolbar: visible < md, only on Write tab, sticky -->
   <div
     id="mobile-toolbar"
-    class="border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-3 py-2 md:hidden"
+    class="sticky top-[49px] z-30 border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]/80 px-3 py-2 backdrop-blur-md md:hidden"
   >
     <Toolbar />
   </div>
