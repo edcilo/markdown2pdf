@@ -50,13 +50,29 @@ import '@styles/global.css';
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <!-- JetBrains Mono for the editor -->
+    <!-- JetBrains Mono for the editor (non-render-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
     />
+    <script is:inline>
+      (function () {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href =
+          'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap';
+        document.head.appendChild(link);
+      })();
+    </script>
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <!-- Prevent FOUC: apply theme before first paint -->
     <script is:inline>
