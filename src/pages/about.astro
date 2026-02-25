@@ -1,0 +1,377 @@
+---
+import MainLayout from '@layouts/MainLayout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import '@styles/about.css';
+---
+
+<MainLayout title="About — MD2PDF">
+  <Header />
+
+  <main class="about-content mx-auto max-w-3xl flex-1 px-4 py-8 md:py-12">
+    <a href="/" class="back-link">&larr; Back to editor</a>
+
+    <h2>What is Markdown?</h2>
+
+    <p>
+      Markdown is a lightweight markup language that lets you write formatted content using plain
+      text. Created by <strong>John Gruber</strong> in <strong>2004</strong>, it was designed to be
+      as readable as possible in its raw form &mdash; no angle brackets, no complex syntax, just
+      intuitive characters like <code>#</code> for headings and <code>**</code> for bold text.
+    </p>
+
+    <p>
+      Its simplicity makes it incredibly portable. Markdown files are just plain text, so they work
+      everywhere &mdash; any editor, any operating system, any version control system. Today,
+      Markdown is the de facto standard for documentation, README files, blogs, notes, and technical
+      writing across platforms like GitHub, Stack Overflow, and countless static site generators.
+    </p>
+
+    <p>
+      Whether you are drafting a quick note or writing a full technical specification, Markdown
+      keeps you focused on <em>content</em> instead of formatting. And with this tool, you can turn that
+      content into a polished PDF in seconds.
+    </p>
+
+    <hr />
+
+    <h2>Markdown Cheatsheet</h2>
+
+    <p>
+      A quick reference for the most common Markdown syntax. Write it on the left, see it rendered
+      on the right, and export to PDF when you are ready.
+    </p>
+
+    <h3>Headings</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code># Heading 1</code></td>
+          <td>Largest heading (H1)</td>
+        </tr>
+        <tr>
+          <td><code>## Heading 2</code></td>
+          <td>Second-level heading (H2)</td>
+        </tr>
+        <tr>
+          <td><code>### Heading 3</code></td>
+          <td>Third-level heading (H3)</td>
+        </tr>
+        <tr>
+          <td><code>#### Heading 4</code></td>
+          <td>Fourth-level heading (H4)</td>
+        </tr>
+        <tr>
+          <td><code>##### Heading 5</code></td>
+          <td>Fifth-level heading (H5)</td>
+        </tr>
+        <tr>
+          <td><code>###### Heading 6</code></td>
+          <td>Smallest heading (H6)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Text Formatting</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>**bold text**</code></td>
+          <td><strong>bold text</strong></td>
+        </tr>
+        <tr>
+          <td><code>*italic text*</code></td>
+          <td><em>italic text</em></td>
+        </tr>
+        <tr>
+          <td><code>~~strikethrough~~</code></td>
+          <td><s>strikethrough</s></td>
+        </tr>
+        <tr>
+          <td><code>***bold and italic***</code></td>
+          <td><strong><em>bold and italic</em></strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Links &amp; Images</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>[link text](https://example.com)</code></td>
+          <td>Inline hyperlink</td>
+        </tr>
+        <tr>
+          <td><code>![alt text](image-url.jpg)</code></td>
+          <td>Embedded image with alt text</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Lists</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>- Item</code></td>
+          <td>Unordered list item (dash)</td>
+        </tr>
+        <tr>
+          <td><code>* Item</code></td>
+          <td>Unordered list item (asterisk)</td>
+        </tr>
+        <tr>
+          <td><code>+ Item</code></td>
+          <td>Unordered list item (plus)</td>
+        </tr>
+        <tr>
+          <td><code>1. First item</code></td>
+          <td>Ordered list item</td>
+        </tr>
+        <tr>
+          <td><code>2. Second item</code></td>
+          <td>Ordered list continues sequentially</td>
+        </tr>
+        <tr>
+          <td><code>&nbsp;&nbsp;- Nested item</code></td>
+          <td>Indent with 2 spaces to nest inside a parent item</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Blockquotes</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>&gt; Quote text</code></td>
+          <td>Single-level blockquote</td>
+        </tr>
+        <tr>
+          <td><code>&gt;&gt; Nested quote</code></td>
+          <td>Nested blockquote (quote within a quote)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Code</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>`inline code`</code></td>
+          <td>Inline code span with monospace font</td>
+        </tr>
+        <tr>
+          <td><code>```language</code></td>
+          <td>Opens a fenced code block (replace <em>language</em> with js, python, etc.)</td>
+        </tr>
+        <tr>
+          <td><code>```</code></td>
+          <td>Closes the fenced code block</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Tables</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>| Header | Header |</code></td>
+          <td>Table header row</td>
+        </tr>
+        <tr>
+          <td><code>| ------ | ------ |</code></td>
+          <td>Separator row (required, defines columns)</td>
+        </tr>
+        <tr>
+          <td><code>| Cell | Cell |</code></td>
+          <td>Table data row</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Horizontal Rule</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>---</code></td>
+          <td>Horizontal rule (three dashes)</td>
+        </tr>
+        <tr>
+          <td><code>***</code></td>
+          <td>Horizontal rule (three asterisks)</td>
+        </tr>
+        <tr>
+          <td><code>___</code></td>
+          <td>Horizontal rule (three underscores)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Task Lists</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>- [ ] Unchecked task</code></td>
+          <td>Unchecked checkbox item</td>
+        </tr>
+        <tr>
+          <td><code>- [x] Completed task</code></td>
+          <td>Checked checkbox item</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr />
+
+    <h2>Technologies Used</h2>
+
+    <ul>
+      <li>
+        <strong>Astro</strong> &mdash; Modern static site generator with island architecture, used for
+        building fast, content-focused websites.
+      </li>
+      <li>
+        <strong>TypeScript</strong> &mdash; Type-safe superset of JavaScript for reliable, maintainable
+        code.
+      </li>
+      <li>
+        <strong>Tailwind CSS v4</strong> &mdash; Utility-first CSS framework for rapid, consistent UI
+        development.
+      </li>
+      <li>
+        <strong>Marked</strong> &mdash; Fast, lightweight Markdown-to-HTML parser.
+      </li>
+      <li>
+        <strong>DOMPurify</strong> &mdash; HTML sanitizer that prevents XSS attacks by cleaning user-generated
+        HTML.
+      </li>
+    </ul>
+  </main>
+
+  <Footer />
+
+  <script>
+    import { getStoredTheme, storeTheme, cycleTheme, applyTheme } from '@utils/theme';
+    import type { Theme } from '@utils/theme';
+
+    const themeToggle = document.querySelector<HTMLButtonElement>('#theme-toggle');
+    const iconSun = document.querySelector<SVGElement>('#icon-sun');
+    const iconMoon = document.querySelector<SVGElement>('#icon-moon');
+    const iconMonitor = document.querySelector<SVGElement>('#icon-monitor');
+
+    if (!themeToggle || !iconSun || !iconMoon || !iconMonitor) {
+      throw new Error('Required theme DOM elements not found');
+    }
+
+    let currentTheme: Theme = getStoredTheme();
+
+    function updateThemeIcons(theme: Theme): void {
+      iconSun!.classList.add('hidden');
+      iconMoon!.classList.add('hidden');
+      iconMonitor!.classList.add('hidden');
+
+      switch (theme) {
+        case 'light':
+          iconSun!.classList.remove('hidden');
+          break;
+        case 'dark':
+          iconMoon!.classList.remove('hidden');
+          break;
+        case 'system':
+          iconMonitor!.classList.remove('hidden');
+          break;
+        default: {
+          const _exhaustive: never = theme;
+          throw new Error(`Unknown theme: ${_exhaustive}`);
+        }
+      }
+    }
+
+    function setTheme(theme: Theme): void {
+      currentTheme = theme;
+      storeTheme(theme);
+      applyTheme(theme);
+      updateThemeIcons(theme);
+    }
+
+    applyTheme(currentTheme);
+    updateThemeIcons(currentTheme);
+
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove('no-transitions');
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (currentTheme === 'system') {
+        applyTheme(currentTheme);
+      }
+    });
+
+    themeToggle.addEventListener('click', () => {
+      const next = cycleTheme(currentTheme);
+      setTheme(next);
+    });
+  </script>
+</MainLayout>

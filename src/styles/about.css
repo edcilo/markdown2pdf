@@ -1,0 +1,163 @@
+/* =========================================================
+   About Page Styles
+   Scoped under .about-content so they only affect the
+   About page content area.
+   Uses CSS custom properties for theme support.
+   ========================================================= */
+
+/* --- Base typography --- */
+.about-content {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    'Helvetica Neue', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-text-primary);
+}
+
+/* --- Headings --- */
+.about-content h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.about-content h2:first-of-type {
+  margin-top: 0;
+}
+
+.about-content h3 {
+  font-size: 1.15em;
+  font-weight: 600;
+  margin-top: 1.4em;
+  margin-bottom: 0.4em;
+}
+
+/* --- Paragraphs --- */
+.about-content p {
+  line-height: 1.7;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+/* --- Links --- */
+.about-content a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.about-content a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* --- Strong & Emphasis --- */
+.about-content strong {
+  font-weight: 700;
+}
+
+.about-content em {
+  font-style: italic;
+}
+
+/* --- Lists --- */
+.about-content ul {
+  padding-left: 1.5em;
+  margin-top: 0;
+  margin-bottom: 1em;
+  list-style-type: disc;
+}
+
+.about-content ol {
+  padding-left: 1.5em;
+  margin-top: 0;
+  margin-bottom: 1em;
+  list-style-type: decimal;
+}
+
+.about-content li {
+  margin-bottom: 0.5em;
+}
+
+.about-content li > ul,
+.about-content li > ol {
+  margin-top: 0.35em;
+  margin-bottom: 0;
+}
+
+/* --- Inline code --- */
+.about-content code {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  background-color: var(--color-bg-secondary);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+/* --- Code blocks --- */
+.about-content pre {
+  margin-top: 0;
+  margin-bottom: 1em;
+  padding: 1em;
+  overflow-x: auto;
+  background-color: #1e293b;
+  border-radius: 6px;
+}
+
+.about-content pre > code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: #e2e8f0;
+  font-size: 0.85em;
+  line-height: 1.6;
+}
+
+/* --- Tables --- */
+.about-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+}
+
+.about-content th,
+.about-content td {
+  border: 1px solid var(--color-border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.about-content th {
+  font-weight: 600;
+  background-color: var(--color-bg-secondary);
+}
+
+.about-content tr:nth-child(even) {
+  background-color: var(--color-bg-secondary);
+}
+
+/* --- Horizontal rules --- */
+.about-content hr {
+  margin: 2em 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+/* --- Back link --- */
+.about-content .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-size: 0.875rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  margin-bottom: 2em;
+}
+
+.about-content .back-link:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}

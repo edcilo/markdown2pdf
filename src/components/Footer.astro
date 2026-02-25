@@ -1,18 +1,26 @@
 ---
-// Minimal footer with attribution
+// Footer with attribution, app name, version, and about link
 ---
 
 <footer
   id="app-footer"
-  class="bg-[var(--color-footer-bg)] px-4 py-3 text-center text-xs text-slate-900"
+  class="flex flex-col items-center gap-1 bg-[var(--color-footer-bg)] px-4 py-3 text-xs text-slate-900 md:flex-row md:justify-between"
 >
-  by
-  <a
-    href="https://edcilo.com"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="underline hover:text-slate-950"
-  >
-    edcilo
-  </a>
+  <p>
+    by
+    <a
+      href="https://edcilo.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="underline hover:text-slate-950"
+    >
+      edcilo
+    </a>
+    <span class="mx-1">&middot;</span>
+    Markdown to PDF
+    <span class="mx-1">&middot;</span>
+    v0.0.1
+  </p>
+
+  <a href="/about" class="underline hover:text-slate-950">About</a>
 </footer>
