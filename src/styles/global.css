@@ -11,6 +11,7 @@
 [data-theme='light'] {
   --color-bg-primary: #ffffff;
   --color-bg-secondary: #f8fafc;
+  --color-bg-editor: #f1f5f9;
   --color-text-primary: #0f172a;
   --color-text-secondary: #64748b;
   --color-border: #e2e8f0;
@@ -22,6 +23,7 @@
 [data-theme='dark'] {
   --color-bg-primary: #0f172a;
   --color-bg-secondary: #1e293b;
+  --color-bg-editor: #172033;
   --color-text-primary: #f1f5f9;
   --color-text-secondary: #94a3b8;
   --color-border: #334155;
