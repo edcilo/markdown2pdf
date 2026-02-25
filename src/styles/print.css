@@ -93,6 +93,15 @@
 
   .preview-content code {
     background-color: #f3f4f6 !important;
+    color: #1a1a1a !important;
+  }
+
+  .preview-content pre {
+    background-color: #f3f4f6 !important;
+  }
+
+  .preview-content pre > code {
+    color: #1a1a1a !important;
   }
 
   .preview-content th,
