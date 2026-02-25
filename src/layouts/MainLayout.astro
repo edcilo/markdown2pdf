@@ -5,7 +5,7 @@ interface Props {
 
 const { title = 'MD2PDF — Markdown to PDF' } = Astro.props;
 
-import '../styles/global.css';
+import '@styles/global.css';
 ---
 
 <!doctype html>
@@ -21,8 +21,26 @@ import '../styles/global.css';
       content="Write Markdown, preview it in real time, and download it as a PDF. Free, fast, and entirely in your browser."
     />
     <title>{title}</title>
+
+    <!-- Prevent FOUC: apply theme before first paint -->
+    <script is:inline>
+      (function () {
+        /* eslint-disable prefer-const */
+        let stored = localStorage.getItem('md2pdf-theme') || 'system';
+        let effective = stored;
+        /* eslint-enable prefer-const */
+        if (stored === 'system') {
+          effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = effective;
+        if (effective === 'dark') document.documentElement.classList.add('dark');
+        document.documentElement.classList.add('no-transitions');
+      })();
+    </script>
   </head>
-  <body class="min-h-screen bg-gray-50 text-gray-900">
+  <body
+    class="flex min-h-screen flex-col bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]"
+  >
     <slot />
   </body>
 </html>

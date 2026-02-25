@@ -12,24 +12,37 @@
     margin: 15mm;
   }
 
+  /* --- Disable theme transitions during print --- */
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+
   /* --- Hide app chrome --- */
-  #editor-panel,
-  #toolbar-container,
-  #action-bar {
+  #app-header,
+  #desktop-toolbar-row,
+  #mobile-tabs,
+  #mobile-toolbar,
+  #mobile-action-bar,
+  #app-footer,
+  #editor-column {
     display: none !important;
   }
 
   /* --- Full-width preview --- */
+  #preview-column {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
   #preview-panel {
     display: block !important;
     height: auto !important;
     overflow: visible !important;
     background: #fff !important;
-  }
-
-  /* Hide the "Preview" header bar */
-  #preview-panel > div:first-child {
-    display: none !important;
   }
 
   #preview-output {
@@ -44,14 +57,59 @@
     background: #fff !important;
     color: #000 !important;
     min-height: auto !important;
+    display: block !important;
   }
 
-  /* Reset the 2-column grid to single column */
-  body > div,
-  .grid {
+  /* Reset flex/grid containers */
+  #main-content {
     display: block !important;
     height: auto !important;
-    grid-template-columns: none !important;
+    overflow: visible !important;
+  }
+
+  /* --- Force light colors for print --- */
+  .preview-content {
+    color: #1a1a1a !important;
+  }
+
+  .preview-content h1,
+  .preview-content h2 {
+    border-bottom-color: #e5e7eb !important;
+  }
+
+  .preview-content h6 {
+    color: #6b7280 !important;
+  }
+
+  .preview-content a {
+    color: #2563eb !important;
+  }
+
+  .preview-content blockquote {
+    border-left-color: #d1d5db !important;
+    color: #6b7280 !important;
+    background-color: #f9fafb !important;
+  }
+
+  .preview-content code {
+    background-color: #f3f4f6 !important;
+  }
+
+  .preview-content th,
+  .preview-content td {
+    border-color: #d1d5db !important;
+  }
+
+  .preview-content th {
+    background-color: #f3f4f6 !important;
+  }
+
+  .preview-content tr:nth-child(even) {
+    background-color: #f9fafb !important;
+  }
+
+  .preview-content hr {
+    border-top-color: #d1d5db !important;
   }
 
   /* --- Preserve backgrounds & colours --- */

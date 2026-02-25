@@ -2,6 +2,7 @@
    Preview Content Styles
    Scoped under .preview-content so they only affect the
    rendered Markdown preview panel.
+   Uses CSS custom properties for theme support.
    ========================================================= */
 
 /* --- Base typography --- */
@@ -11,7 +12,7 @@
     'Helvetica Neue', sans-serif;
   font-size: 1rem;
   line-height: 1.7;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 /* --- Headings --- */
@@ -21,7 +22,7 @@
   margin-top: 0;
   margin-bottom: 0.6em;
   padding-bottom: 0.3em;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .preview-content h2 {
@@ -30,7 +31,7 @@
   margin-top: 1.2em;
   margin-bottom: 0.5em;
   padding-bottom: 0.25em;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .preview-content h3 {
@@ -59,7 +60,7 @@
   font-weight: 600;
   margin-top: 0.8em;
   margin-bottom: 0.3em;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 /* --- Paragraphs --- */
@@ -71,12 +72,12 @@
 
 /* --- Links --- */
 .preview-content a {
-  color: #2563eb;
+  color: var(--color-accent);
   text-decoration: underline;
 }
 
 .preview-content a:hover {
-  color: #1d4ed8;
+  color: var(--color-accent-hover);
 }
 
 /* --- Strong & Emphasis --- */
@@ -117,10 +118,10 @@
 .preview-content blockquote {
   margin: 0 0 1em 0;
   padding: 0.5em 1em;
-  border-left: 4px solid #d1d5db;
-  color: #6b7280;
+  border-left: 4px solid var(--color-border);
+  color: var(--color-text-secondary);
   font-style: italic;
-  background-color: #f9fafb;
+  background-color: var(--color-bg-secondary);
 }
 
 .preview-content blockquote p:last-child {
@@ -131,7 +132,7 @@
 .preview-content code {
   font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
   font-size: 0.875em;
-  background-color: #f3f4f6;
+  background-color: var(--color-bg-secondary);
   padding: 0.15em 0.4em;
   border-radius: 4px;
 }
@@ -165,18 +166,18 @@
 
 .preview-content th,
 .preview-content td {
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-border);
   padding: 0.5em 0.75em;
   text-align: left;
 }
 
 .preview-content th {
   font-weight: 600;
-  background-color: #f3f4f6;
+  background-color: var(--color-bg-secondary);
 }
 
 .preview-content tr:nth-child(even) {
-  background-color: #f9fafb;
+  background-color: var(--color-bg-secondary);
 }
 
 /* --- Images --- */
@@ -190,5 +191,5 @@
 .preview-content hr {
   margin: 1.5em 0;
   border: none;
-  border-top: 1px solid #d1d5db;
+  border-top: 1px solid var(--color-border);
 }

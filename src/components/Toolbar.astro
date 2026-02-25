@@ -4,20 +4,20 @@ import { TOOLBAR_BUTTONS } from '@/types/toolbar';
 const separatorAfter = new Set(['italic', 'heading3', 'image', 'ordered-list', 'blockquote']);
 ---
 
-<div id="toolbar" class="flex flex-wrap items-center gap-1">
+<div class="toolbar flex flex-nowrap items-center gap-1 overflow-x-auto">
   {
     TOOLBAR_BUTTONS.map((btn) => (
       <>
         <button
           type="button"
-          class="toolbar-btn rounded px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-200 active:bg-gray-300"
+          class="toolbar-btn shrink-0 rounded px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-primary)] hover:text-[var(--color-text-primary)] active:translate-y-px"
           data-action={btn.action}
           title={btn.title}
         >
           {btn.label}
         </button>
         {separatorAfter.has(btn.action) && (
-          <span class="mx-0.5 inline-block h-5 w-px bg-gray-300" />
+          <span class="mx-0.5 inline-block h-5 w-px shrink-0 bg-[var(--color-border)]" />
         )}
       </>
     ))

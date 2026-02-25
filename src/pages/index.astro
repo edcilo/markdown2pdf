@@ -1,37 +1,145 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
-import EditorPanel from '../components/EditorPanel.astro';
-import PreviewPanel from '../components/PreviewPanel.astro';
-import ActionBar from '../components/ActionBar.astro';
-import '../styles/preview.css';
-import '../styles/print.css';
+import MainLayout from '@layouts/MainLayout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import EditorPanel from '@components/EditorPanel.astro';
+import PreviewPanel from '@components/PreviewPanel.astro';
+import ActionBar from '@components/ActionBar.astro';
+import Toolbar from '@components/Toolbar.astro';
+import '@styles/preview.css';
+import '@styles/print.css';
 ---
 
 <MainLayout>
-  <div class="grid h-[calc(100vh-57px)] grid-cols-2">
-    <EditorPanel />
-    <PreviewPanel />
+  <!-- 1. Header (sticky) -->
+  <Header />
+
+  <!-- 2. Desktop toolbar row: visible md+ only -->
+  <div
+    id="desktop-toolbar-row"
+    class="hidden items-center gap-2 border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 py-2 md:flex"
+  >
+    <div class="flex-1 overflow-x-auto">
+      <Toolbar />
+    </div>
+    <ActionBar />
   </div>
 
-  <ActionBar />
+  <!-- 3. Mobile tabs: visible < md only -->
+  <div
+    id="mobile-tabs"
+    class="flex border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)] md:hidden"
+  >
+    <button
+      id="tab-write"
+      type="button"
+      class="tab-btn flex-1 border-b-2 border-[var(--color-accent)] px-4 py-2.5 text-sm font-medium text-[var(--color-accent)]"
+      data-tab="write"
+    >
+      Write
+    </button>
+    <button
+      id="tab-preview"
+      type="button"
+      class="tab-btn flex-1 border-b-2 border-transparent px-4 py-2.5 text-sm font-medium text-[var(--color-text-secondary)]"
+      data-tab="preview"
+    >
+      Preview
+    </button>
+  </div>
+
+  <!-- 4. Mobile toolbar: visible < md, only on Write tab -->
+  <div
+    id="mobile-toolbar"
+    class="border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-3 py-2 md:hidden"
+  >
+    <Toolbar />
+  </div>
+
+  <!-- 5. Main content area -->
+  <div id="main-content" class="flex flex-1 overflow-hidden">
+    <!-- Editor column -->
+    <div
+      id="editor-column"
+      class="flex w-full flex-col md:w-1/2 md:border-r md:border-[var(--color-border)]"
+    >
+      <EditorPanel />
+    </div>
+
+    <!-- Preview column -->
+    <div id="preview-column" class="hidden w-full flex-col md:flex md:w-1/2">
+      <PreviewPanel />
+    </div>
+  </div>
+
+  <!-- 6. Mobile action bar: visible < md only, fixed bottom -->
+  <div
+    id="mobile-action-bar"
+    class="fixed right-0 bottom-0 left-0 z-40 border-t border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 py-3 md:hidden"
+  >
+    <ActionBar />
+  </div>
+
+  <!-- 7. Footer -->
+  <Footer />
 
   <script>
     import { parseMarkdown } from '@utils/markdown';
     import { downloadPdf } from '@utils/pdf';
     import { insertMarkdownSyntax } from '@utils/toolbar-actions';
     import { DEFAULT_MARKDOWN } from '@utils/default-content';
+    import { getStoredTheme, storeTheme, cycleTheme, applyTheme } from '@utils/theme';
     import type { ToolbarAction } from '@/types/toolbar';
+    import type { Theme } from '@utils/theme';
+
+    /* ================================================================
+       DOM Element Queries
+       ================================================================ */
 
     const markdownInput = document.querySelector<HTMLTextAreaElement>('#markdown-input');
     const previewOutput = document.querySelector<HTMLDivElement>('#preview-output');
-    const downloadBtn = document.querySelector<HTMLButtonElement>('#download-pdf-btn');
-    const toolbar = document.querySelector<HTMLDivElement>('#toolbar');
+    const themeToggle = document.querySelector<HTMLButtonElement>('#theme-toggle');
+    const iconSun = document.querySelector<SVGElement>('#icon-sun');
+    const iconMoon = document.querySelector<SVGElement>('#icon-moon');
+    const iconMonitor = document.querySelector<SVGElement>('#icon-monitor');
 
-    if (!markdownInput || !previewOutput || !downloadBtn || !toolbar) {
+    // Tabs (mobile)
+    const tabWrite = document.querySelector<HTMLButtonElement>('#tab-write');
+    const tabPreview = document.querySelector<HTMLButtonElement>('#tab-preview');
+    const editorColumn = document.querySelector<HTMLDivElement>('#editor-column');
+    const previewColumn = document.querySelector<HTMLDivElement>('#preview-column');
+    const mobileToolbar = document.querySelector<HTMLDivElement>('#mobile-toolbar');
+
+    // Download buttons — multiple instances (desktop + mobile)
+    const downloadBtns = document.querySelectorAll<HTMLButtonElement>('.download-pdf-btn');
+
+    // Toolbars — multiple instances (desktop + mobile)
+    const toolbars = document.querySelectorAll<HTMLDivElement>('.toolbar');
+
+    if (
+      !markdownInput ||
+      !previewOutput ||
+      !themeToggle ||
+      !tabWrite ||
+      !tabPreview ||
+      !editorColumn ||
+      !previewColumn ||
+      !mobileToolbar ||
+      !iconSun ||
+      !iconMoon ||
+      !iconMonitor
+    ) {
       throw new Error('Required DOM elements not found');
     }
 
-    /* ---- Debounce utility ---- */
+    if (downloadBtns.length === 0 || toolbars.length === 0) {
+      throw new Error('Required toolbar or download button elements not found');
+    }
+
+    /* ================================================================
+       Debounce Utility
+       ================================================================ */
+
     function debounce<T extends (...args: Parameters<T>) => void>(
       fn: T,
       delay: number,
@@ -43,35 +151,143 @@ import '../styles/print.css';
       };
     }
 
-    /* ---- Update preview ---- */
+    /* ================================================================
+       Theme System
+       ================================================================ */
+
+    let currentTheme: Theme = getStoredTheme();
+
+    function updateThemeIcons(theme: Theme): void {
+      iconSun!.classList.add('hidden');
+      iconMoon!.classList.add('hidden');
+      iconMonitor!.classList.add('hidden');
+
+      switch (theme) {
+        case 'light':
+          iconSun!.classList.remove('hidden');
+          break;
+        case 'dark':
+          iconMoon!.classList.remove('hidden');
+          break;
+        case 'system':
+          iconMonitor!.classList.remove('hidden');
+          break;
+        default: {
+          const _exhaustive: never = theme;
+          throw new Error(`Unknown theme: ${_exhaustive}`);
+        }
+      }
+    }
+
+    function setTheme(theme: Theme): void {
+      currentTheme = theme;
+      storeTheme(theme);
+      applyTheme(theme);
+      updateThemeIcons(theme);
+    }
+
+    // Initialize theme on load
+    applyTheme(currentTheme);
+    updateThemeIcons(currentTheme);
+
+    // Remove no-transitions class after first paint
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove('no-transitions');
+    });
+
+    // Listen for system theme changes (when in "system" mode)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (currentTheme === 'system') {
+        applyTheme(currentTheme);
+      }
+    });
+
+    // Theme toggle click
+    themeToggle.addEventListener('click', () => {
+      const next = cycleTheme(currentTheme);
+      setTheme(next);
+    });
+
+    /* ================================================================
+       Tab System (Mobile)
+       ================================================================ */
+
+    type Tab = 'write' | 'preview';
+
+    function setActiveTab(tab: Tab): void {
+      if (tab === 'write') {
+        // Show editor, hide preview
+        editorColumn!.classList.remove('hidden');
+        editorColumn!.classList.add('flex');
+        previewColumn!.classList.add('hidden');
+        previewColumn!.classList.remove('flex');
+        mobileToolbar!.classList.remove('hidden');
+
+        // Tab styles
+        tabWrite!.classList.add('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
+        tabWrite!.classList.remove('border-transparent', 'text-[var(--color-text-secondary)]');
+        tabPreview!.classList.remove('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
+        tabPreview!.classList.add('border-transparent', 'text-[var(--color-text-secondary)]');
+      } else {
+        // Show preview, hide editor
+        previewColumn!.classList.remove('hidden');
+        previewColumn!.classList.add('flex');
+        editorColumn!.classList.add('hidden');
+        editorColumn!.classList.remove('flex');
+        mobileToolbar!.classList.add('hidden');
+
+        // Tab styles
+        tabPreview!.classList.add('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
+        tabPreview!.classList.remove('border-transparent', 'text-[var(--color-text-secondary)]');
+        tabWrite!.classList.remove('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
+        tabWrite!.classList.add('border-transparent', 'text-[var(--color-text-secondary)]');
+      }
+    }
+
+    tabWrite.addEventListener('click', () => setActiveTab('write'));
+    tabPreview.addEventListener('click', () => setActiveTab('preview'));
+
+    /* ================================================================
+       Markdown Preview
+       ================================================================ */
+
     function updatePreview(): void {
       const raw = markdownInput!.value;
       const html = parseMarkdown(raw);
-
       previewOutput!.innerHTML = html;
-      downloadBtn!.disabled = html.length === 0;
+
+      downloadBtns.forEach((btn) => {
+        btn.disabled = html.length === 0;
+      });
     }
 
     const debouncedUpdate = debounce(updatePreview, 150);
-
     markdownInput.addEventListener('input', debouncedUpdate);
 
-    /* ---- Load default content on startup ---- */
+    // Load default content on startup
     markdownInput.value = DEFAULT_MARKDOWN;
     updatePreview();
 
-    /* ---- Toolbar actions (event delegation) ---- */
-    toolbar.addEventListener('click', (event: MouseEvent) => {
-      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.toolbar-btn');
-      if (!button) return;
+    /* ================================================================
+       Toolbar Actions (Event Delegation)
+       ================================================================ */
 
-      const action = button.dataset.action as ToolbarAction | undefined;
-      if (!action) return;
+    toolbars.forEach((toolbar) => {
+      toolbar.addEventListener('click', (event: MouseEvent) => {
+        const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.toolbar-btn');
+        if (!button) return;
 
-      insertMarkdownSyntax(markdownInput, action);
+        const action = button.dataset.action as ToolbarAction | undefined;
+        if (!action) return;
+
+        insertMarkdownSyntax(markdownInput!, action);
+      });
     });
 
-    /* ---- Keyboard shortcuts ---- */
+    /* ================================================================
+       Keyboard Shortcuts
+       ================================================================ */
+
     markdownInput.addEventListener('keydown', (event: KeyboardEvent) => {
       const mod = event.ctrlKey || event.metaKey;
       if (!mod) return;
@@ -92,14 +308,19 @@ import '../styles/print.css';
 
       if (action) {
         event.preventDefault();
-        insertMarkdownSyntax(markdownInput, action);
+        insertMarkdownSyntax(markdownInput!, action);
       }
     });
 
-    /* ---- Download PDF ---- */
-    downloadBtn.addEventListener('click', () => {
-      if (downloadBtn.disabled) return;
-      downloadPdf('md2pdf-document.pdf');
+    /* ================================================================
+       Download PDF
+       ================================================================ */
+
+    downloadBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        downloadPdf('md2pdf-document.pdf');
+      });
     });
   </script>
 </MainLayout>

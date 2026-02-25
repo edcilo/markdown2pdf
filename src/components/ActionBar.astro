@@ -1,16 +1,11 @@
 ---
-
+// Download PDF button — rendered in both desktop toolbar row and mobile fixed bar
 ---
 
-<div
-  id="action-bar"
-  class="flex items-center justify-end border-t border-gray-300 bg-gray-100 px-4 py-3"
+<button
+  type="button"
+  class="download-pdf-btn w-full rounded-md bg-[var(--color-accent)] px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent-hover)] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 md:w-auto"
+  disabled
 >
-  <button
-    id="download-pdf-btn"
-    disabled
-    class="rounded-md bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-  >
-    Descargar PDF
-  </button>
-</div>
+  Download PDF
+</button>
