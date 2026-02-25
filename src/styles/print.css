@@ -1,0 +1,92 @@
+/* =========================================================
+   Print Styles
+   Applied only when the user triggers window.print().
+   Hides all app chrome and shows only the preview content
+   formatted for A4 paper.
+   ========================================================= */
+
+@media print {
+  /* --- Page setup --- */
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+
+  /* --- Hide app chrome --- */
+  #editor-panel,
+  #toolbar-container,
+  #action-bar {
+    display: none !important;
+  }
+
+  /* --- Full-width preview --- */
+  #preview-panel {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  /* Hide the "Preview" header bar */
+  #preview-panel > div:first-child {
+    display: none !important;
+  }
+
+  #preview-output {
+    overflow: visible !important;
+    padding: 0 !important;
+    height: auto !important;
+    flex: none !important;
+  }
+
+  /* --- Layout reset --- */
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    min-height: auto !important;
+  }
+
+  /* Reset the 2-column grid to single column */
+  body > div,
+  .grid {
+    display: block !important;
+    height: auto !important;
+    grid-template-columns: none !important;
+  }
+
+  /* --- Preserve backgrounds & colours --- */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* --- Page break rules --- */
+  .preview-content h1,
+  .preview-content h2,
+  .preview-content h3,
+  .preview-content h4,
+  .preview-content h5,
+  .preview-content h6 {
+    break-after: avoid;
+  }
+
+  .preview-content pre,
+  .preview-content blockquote,
+  .preview-content table,
+  .preview-content img {
+    break-inside: avoid;
+  }
+
+  .preview-content ul,
+  .preview-content ol {
+    break-inside: avoid;
+  }
+
+  /* --- Links: show URL after link text --- */
+  .preview-content a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.8em;
+    color: #6b7280;
+    word-break: break-all;
+  }
+}

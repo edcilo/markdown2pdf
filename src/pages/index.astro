@@ -1,17 +1,105 @@
 ---
-import '../styles/global.css';
+import MainLayout from '../layouts/MainLayout.astro';
+import EditorPanel from '../components/EditorPanel.astro';
+import PreviewPanel from '../components/PreviewPanel.astro';
+import ActionBar from '../components/ActionBar.astro';
+import '../styles/preview.css';
+import '../styles/print.css';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
-    <h1 class="text-4xl font-bold text-blue-600">Astro</h1>
-  </body>
-</html>
+<MainLayout>
+  <div class="grid h-[calc(100vh-57px)] grid-cols-2">
+    <EditorPanel />
+    <PreviewPanel />
+  </div>
+
+  <ActionBar />
+
+  <script>
+    import { parseMarkdown } from '@utils/markdown';
+    import { downloadPdf } from '@utils/pdf';
+    import { insertMarkdownSyntax } from '@utils/toolbar-actions';
+    import { DEFAULT_MARKDOWN } from '@utils/default-content';
+    import type { ToolbarAction } from '@/types/toolbar';
+
+    const markdownInput = document.querySelector<HTMLTextAreaElement>('#markdown-input');
+    const previewOutput = document.querySelector<HTMLDivElement>('#preview-output');
+    const downloadBtn = document.querySelector<HTMLButtonElement>('#download-pdf-btn');
+    const toolbar = document.querySelector<HTMLDivElement>('#toolbar');
+
+    if (!markdownInput || !previewOutput || !downloadBtn || !toolbar) {
+      throw new Error('Required DOM elements not found');
+    }
+
+    /* ---- Debounce utility ---- */
+    function debounce<T extends (...args: Parameters<T>) => void>(
+      fn: T,
+      delay: number,
+    ): (...args: Parameters<T>) => void {
+      let timer: ReturnType<typeof setTimeout>;
+      return (...args: Parameters<T>) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      };
+    }
+
+    /* ---- Update preview ---- */
+    function updatePreview(): void {
+      const raw = markdownInput!.value;
+      const html = parseMarkdown(raw);
+
+      previewOutput!.innerHTML = html;
+      downloadBtn!.disabled = html.length === 0;
+    }
+
+    const debouncedUpdate = debounce(updatePreview, 150);
+
+    markdownInput.addEventListener('input', debouncedUpdate);
+
+    /* ---- Load default content on startup ---- */
+    markdownInput.value = DEFAULT_MARKDOWN;
+    updatePreview();
+
+    /* ---- Toolbar actions (event delegation) ---- */
+    toolbar.addEventListener('click', (event: MouseEvent) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.toolbar-btn');
+      if (!button) return;
+
+      const action = button.dataset.action as ToolbarAction | undefined;
+      if (!action) return;
+
+      insertMarkdownSyntax(markdownInput, action);
+    });
+
+    /* ---- Keyboard shortcuts ---- */
+    markdownInput.addEventListener('keydown', (event: KeyboardEvent) => {
+      const mod = event.ctrlKey || event.metaKey;
+      if (!mod) return;
+
+      let action: ToolbarAction | null = null;
+
+      switch (event.key.toLowerCase()) {
+        case 'b':
+          action = 'bold';
+          break;
+        case 'i':
+          action = 'italic';
+          break;
+        case 'k':
+          action = 'link';
+          break;
+      }
+
+      if (action) {
+        event.preventDefault();
+        insertMarkdownSyntax(markdownInput, action);
+      }
+    });
+
+    /* ---- Download PDF ---- */
+    downloadBtn.addEventListener('click', () => {
+      if (downloadBtn.disabled) return;
+      downloadPdf('md2pdf-document.pdf');
+    });
+  </script>
+</MainLayout>

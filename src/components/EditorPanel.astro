@@ -1,0 +1,15 @@
+---
+import Toolbar from './Toolbar.astro';
+---
+
+<div id="editor-panel" class="flex h-full flex-col border-r border-gray-300 bg-white">
+  <div id="toolbar-container" class="border-b border-gray-200 px-3 py-2">
+    <Toolbar />
+  </div>
+
+  <textarea
+    id="markdown-input"
+    class="flex-1 resize-none overflow-y-auto border-none p-4 font-mono text-sm leading-relaxed text-gray-800 outline-none"
+    placeholder="Escribe tu Markdown aquí..."
+    spellcheck="false"></textarea>
+</div>
