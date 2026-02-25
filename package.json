@@ -1,7 +1,7 @@
 {
   "name": "edc-md2pdf",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
     "astro": "^5.17.1",
     "dompurify": "^3.3.1",
     "marked": "^17.0.3"

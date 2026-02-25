@@ -1,0 +1,88 @@
+---
+import MainLayout from '@layouts/MainLayout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+---
+
+<MainLayout title="404 — Page not found">
+  <Header />
+
+  <main id="main-content" class="flex flex-1 flex-col items-center justify-center px-4 py-16">
+    <p class="text-6xl font-bold text-[var(--color-accent)]">404</p>
+    <h1 class="mt-4 text-xl font-semibold text-[var(--color-text-primary)]">Page not found</h1>
+    <p class="mt-2 text-sm text-[var(--color-text-secondary)]">
+      The page you are looking for does not exist.
+    </p>
+    <a
+      href="/"
+      class="mt-6 rounded-md bg-[var(--color-accent)] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+    >
+      Back to editor
+    </a>
+  </main>
+
+  <Footer />
+
+  <script>
+    import { getStoredTheme, storeTheme, cycleTheme, applyTheme } from '@utils/theme';
+    import type { Theme } from '@utils/theme';
+
+    const themeToggle = document.querySelector<HTMLButtonElement>('#theme-toggle');
+    const iconSun = document.querySelector<SVGElement>('#icon-sun');
+    const iconMoon = document.querySelector<SVGElement>('#icon-moon');
+    const iconMonitor = document.querySelector<SVGElement>('#icon-monitor');
+
+    if (!themeToggle || !iconSun || !iconMoon || !iconMonitor) {
+      throw new Error('Required theme DOM elements not found');
+    }
+
+    let currentTheme: Theme = getStoredTheme();
+
+    function updateThemeIcons(theme: Theme): void {
+      iconSun!.classList.add('hidden');
+      iconMoon!.classList.add('hidden');
+      iconMonitor!.classList.add('hidden');
+
+      switch (theme) {
+        case 'light':
+          iconSun!.classList.remove('hidden');
+          break;
+        case 'dark':
+          iconMoon!.classList.remove('hidden');
+          break;
+        case 'system':
+          iconMonitor!.classList.remove('hidden');
+          break;
+        default: {
+          const _exhaustive: never = theme;
+          throw new Error(`Unknown theme: ${_exhaustive}`);
+        }
+      }
+    }
+
+    function setTheme(theme: Theme): void {
+      currentTheme = theme;
+      storeTheme(theme);
+      applyTheme(theme);
+      updateThemeIcons(theme);
+    }
+
+    applyTheme(currentTheme);
+    updateThemeIcons(currentTheme);
+
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove('no-transitions');
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (currentTheme === 'system') {
+        applyTheme(currentTheme);
+      }
+    });
+
+    themeToggle.addEventListener('click', () => {
+      const next = cycleTheme(currentTheme);
+      setTheme(next);
+    });
+  </script>
+</MainLayout>

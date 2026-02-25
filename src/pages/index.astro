@@ -28,11 +28,16 @@ import '@styles/print.css';
   <!-- 3. Mobile tabs: visible < md only, sticky -->
   <div
     id="mobile-tabs"
+    role="tablist"
+    aria-label="Editor tabs"
     class="sticky top-0 z-40 flex border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]/80 backdrop-blur-md md:hidden"
   >
     <button
       id="tab-write"
       type="button"
+      role="tab"
+      aria-selected="true"
+      aria-controls="editor-column"
       class="tab-btn flex-1 border-b-2 border-[var(--color-accent)] px-4 py-2.5 text-sm font-medium text-[var(--color-accent)]"
       data-tab="write"
     >
@@ -41,6 +46,9 @@ import '@styles/print.css';
     <button
       id="tab-preview"
       type="button"
+      role="tab"
+      aria-selected="false"
+      aria-controls="preview-column"
       class="tab-btn flex-1 border-b-2 border-transparent px-4 py-2.5 text-sm font-medium text-[var(--color-text-secondary)]"
       data-tab="preview"
     >
@@ -57,20 +65,27 @@ import '@styles/print.css';
   </div>
 
   <!-- 5. Main content area -->
-  <div id="main-content" class="flex flex-1 overflow-hidden">
+  <main id="main-content" class="flex flex-1 overflow-hidden">
     <!-- Editor column -->
     <div
       id="editor-column"
+      role="tabpanel"
+      aria-labelledby="tab-write"
       class="flex w-full flex-col md:w-1/2 md:border-r md:border-[var(--color-border)]"
     >
       <EditorPanel />
     </div>
 
     <!-- Preview column -->
-    <div id="preview-column" class="hidden w-full flex-col md:flex md:w-1/2">
+    <div
+      id="preview-column"
+      role="tabpanel"
+      aria-labelledby="tab-preview"
+      class="hidden w-full flex-col md:flex md:w-1/2"
+    >
       <PreviewPanel />
     </div>
-  </div>
+  </main>
 
   <!-- 6. Mobile action bar: visible < md only, fixed bottom -->
   <div
@@ -223,11 +238,13 @@ import '@styles/print.css';
         previewColumn!.classList.remove('flex');
         mobileToolbar!.classList.remove('hidden');
 
-        // Tab styles
+        // Tab styles + ARIA
         tabWrite!.classList.add('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
         tabWrite!.classList.remove('border-transparent', 'text-[var(--color-text-secondary)]');
+        tabWrite!.setAttribute('aria-selected', 'true');
         tabPreview!.classList.remove('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
         tabPreview!.classList.add('border-transparent', 'text-[var(--color-text-secondary)]');
+        tabPreview!.setAttribute('aria-selected', 'false');
       } else {
         // Show preview, hide editor
         previewColumn!.classList.remove('hidden');
@@ -236,11 +253,13 @@ import '@styles/print.css';
         editorColumn!.classList.remove('flex');
         mobileToolbar!.classList.add('hidden');
 
-        // Tab styles
+        // Tab styles + ARIA
         tabPreview!.classList.add('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
         tabPreview!.classList.remove('border-transparent', 'text-[var(--color-text-secondary)]');
+        tabPreview!.setAttribute('aria-selected', 'true');
         tabWrite!.classList.remove('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
         tabWrite!.classList.add('border-transparent', 'text-[var(--color-text-secondary)]');
+        tabWrite!.setAttribute('aria-selected', 'false');
       }
     }
 

@@ -1,9 +1,18 @@
 ---
 interface Props {
   title?: string;
+  description?: string;
+  ogImage?: string;
 }
 
-const { title = 'MD2PDF — Markdown to PDF' } = Astro.props;
+const {
+  title = 'MD2PDF — Markdown to PDF',
+  description = 'Write Markdown, preview it in real time, and download it as a PDF. Free, fast, and entirely in your browser.',
+  ogImage = '/og-image.png',
+} = Astro.props;
+
+const canonicalUrl = Astro.url.href;
+const ogImageUrl = new URL(ogImage, Astro.site).href;
 
 import '@styles/global.css';
 ---
@@ -12,15 +21,34 @@ import '@styles/global.css';
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#2563eb" />
+    <title>{title}</title>
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
-    <meta
-      name="description"
-      content="Write Markdown, preview it in real time, and download it as a PDF. Free, fast, and entirely in your browser."
-    />
-    <title>{title}</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="MD2PDF" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- JetBrains Mono for the editor -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -49,6 +77,40 @@ import '@styles/global.css';
   <body
     class="flex min-h-screen flex-col bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]"
   >
+    <!-- Skip to main content link (a11y) -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-[var(--color-accent)] focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+    >
+      Skip to content
+    </a>
+
     <slot />
+
+    <!-- JSON-LD Structured Data -->
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'MD2PDF',
+        description:
+          'Write Markdown, preview it in real time, and download it as a PDF. Free, fast, and entirely in your browser.',
+        url: 'https://md2pdf.edcilo.com',
+        applicationCategory: 'UtilityApplication',
+        operatingSystem: 'Any',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+        author: {
+          '@type': 'Person',
+          name: 'edcilo',
+          url: 'https://edcilo.com',
+        },
+      })}
+    />
   </body>
 </html>
